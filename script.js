@@ -21,17 +21,29 @@ function createBoard() {
 
 function makeMove(i) {
     if (board[i] === "") {
+        // --- LOGIK BUNYI START ---
+        const soundX = document.getElementById("audioX");
+        const soundO = document.getElementById("audioO");
+
+        if (currentPlayer === "X") {
+            soundX.currentTime = 0;
+            soundX.play();
+        } else {
+            soundO.currentTime = 0;
+            soundO.play();
+        }
+        // --- LOGIK BUNYI END ---
+
         board[i] = currentPlayer;
         
-        // Cek jika ada pemenang atau seri
+        // Cek jika ada pemenang
         if (checkWinner()) {
             let winnerName = currentPlayer === "X" ? playerX : playerO;
-            createBoard(); // Update papan terakhir
+            createBoard(); 
             
-            // Popup kemenangan
             setTimeout(() => {
-                showWinner(winnerName)(`Tahniah! ${winnerName} menang! 🎉`);
-            }, 100); 
+                showWinner(winnerName); // Betulkan syntax di sini
+            }, 200); 
             
             boardElement.style.pointerEvents = "none";
             return;
@@ -39,7 +51,9 @@ function makeMove(i) {
 
         // Cek seri (Draw)
         if (!board.includes("")) {
-            setTimeout(() => { showWinner(winnerName)("Permainan Seri! 🤝"); }, 100);
+            setTimeout(() => { 
+                showWinner(null); // Panggil showWinner tanpa nama untuk Seri
+            }, 200);
             return;
         }
         
